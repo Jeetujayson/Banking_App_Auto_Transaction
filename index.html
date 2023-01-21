@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Banking Management App</title>
+  </head>
+  <body>
+    <h1>Banking Management App</h1>
+    <table id="accounts">
+      <tr>
+        <th>Account Number</th>
+        <th>Balance</th>
+      </tr>
+    </table>
+    <br />
+    <button id="start" onclick="startTransaction()">Start</button>
+    <button id="stop" onclick="stopTransaction()" disabled>Stop</button>
+    <br /><br />
+    <p>Transaction Counter: <span id="counter"></span></p>
+    <script>
+      var interval;
+      var counter = 0;
+      var accounts;
+
+      // Read the accounts.csv file and display it in the table
+      function readCSV() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "accounts.csv", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            accounts = xhr.responseText.split("\n");
+            for (var i = 1; i < accounts.length; i++) {
+              var account = accounts[i].split(",");
+              var accountNumber = account[0];
+              var balance = account[1];
+              var row = document.createElement("tr");
+              var accountNumberCell = document.createElement("td");
+              var balanceCell = document.createElement("td");
+              accountNumberCell.innerHTML = accountNumber;
+              balanceCell.innerHTML = balance;
+              row.appendChild(accountNumberCell);
+              row.appendChild(balanceCell);
+              document.getElementById("accounts").appendChild(row);
+            }
+          }
+        };
+        xhr.send();
+      }
+
+      // Start the auto transaction
+      function startTransaction() {
+        document.getElementById("start").disabled = true;
+        document.getElementById("stop").disabled = false;
+        interval = setInterval(transact, 1);
+      }
+
+      // Stop the auto transaction
+      function stopTransaction() {
+        document.getElementById("start").disabled = false;
+        document.getElementById("stop").disabled = true;
+        clearInterval(interval);
+      }
+
+      // Perform a transaction between two random accounts
+      function transact() {
+        var account1 = Math.floor(Math.random() * 10) + 1;
+        var account2 = Math.floor(Math.random() * 10) + 1;
+        while (account1 == account2) {
+          account2 = Math.floor(Math.random() * 10) + 1;
+        }
+        var account1Data = accounts[account1].split(",");
+        var account2Data = accounts[account2].split(",");
+        var amount = Math.floor(Math.random() * 100) + 1;
+        var newBalance1 = parseInt(account1Data[1]) - amount;
+        var newBalance2 = parseInt(account2Data[1]) + amount;
+        account1Data[1] = newBalance1;
+        account2Data[1] = newBalance2;
+        accounts[account1] = account1Data.join(",");
+        accounts[account2] = account2Data.join(",");
+        var rows = document.getElementsByTagName("tr");
+        for (var i = 1; i < rows.length; i++) {
+          var accountNumber = rows[i].childNodes[0].innerHTML;
+          if (
+            accountNumber == account1Data[0] ||
+            accountNumber == account2Data[0]
+          ) {
+            var balance = accounts[i].split(",")[1];
+            rows[i].childNodes[1].innerHTML = balance;
+          }
+        }
+        counter++;
+        if (counter > 999) {
+          document.getElementById("counter").innerHTML =
+            counter.toExponential();
+        } else {
+          document.getElementById("counter").innerHTML = counter;
+        }
+      }
+      // Call the readCSV function to display the accounts table
+      readCSV();
+    </script>
+  </body>
+</html>
