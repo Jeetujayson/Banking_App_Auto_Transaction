@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Banking Management App</title>
+    <title>Address Verification System</title>
   </head>
   <body>
-    <h1>Banking Management App</h1>
+    <h1>Address Verification System</h1>
     <table id="accounts">
       <tr>
         <th>Account Number</th>
@@ -17,14 +17,14 @@
     <br /><br />
     <p>Transaction Counter: <span id="counter"></span></p>
     <p>E notation: <span id="counter-2"></span></p>
-    
+    <p>Aleph null: <span id="counter-3"></span></p>
 
     <script>
       var interval;
-      var counter = 0;
       var accounts;
+      var counter = 0;
       var secondCounter = 0;
-
+      var thirdCounter = 0;
       // Read the accounts.csv file and display it in the table
       function readCSV() {
         var xhr = new XMLHttpRequest();
@@ -93,12 +93,18 @@
           }
         }
         counter++;
+
         if (counter >= 999) {
           var exponent = Math.floor(counter / 1000);
           var firstCounter = 1;
           secondCounter = secondCounter + 1;
+          if (secondCounter >= 293) {
+            thirdCounter = thirdCounter + 1;
+            secondCounter = 1;
+          }
           document.getElementById("counter").innerHTML = firstCounter;
           document.getElementById("counter-2").innerHTML = secondCounter;
+          document.getElementById("counter-3").innerHTML = thirdCounter;
           counter = 0;
         } else {
           document.getElementById("counter").innerHTML = counter;
