@@ -15,6 +15,8 @@
     <button id="start" onclick="startTransaction()">Start</button>
     <button id="stop" onclick="stopTransaction()" disabled>Stop</button>
     <br /><br />
+    <p>Last Transacted Amount: <span id="last-amount"></span></p>
+    <p>Total Balance: <span id="total-balance"></span></p>
     <p>Transaction Counter: <span id="counter"></span></p>
     <p>E notation: <span id="counter-2"></span></p>
     <p>Aleph null: <span id="counter-3"></span></p>
@@ -25,6 +27,7 @@
       var counter = 0;
       var secondCounter = 0;
       var thirdCounter = 0;
+      var totalBalance = 0;
       // Read the accounts.csv file and display it in the table
       function readCSV() {
         var xhr = new XMLHttpRequest();
@@ -52,6 +55,7 @@
 
       // Start the auto transaction
       function startTransaction() {
+        totalBalance = 0;
         document.getElementById("start").disabled = true;
         document.getElementById("stop").disabled = false;
         interval = setInterval(transact, 1);
@@ -65,7 +69,7 @@
       }
 
       // Perform a transaction between two random accounts
-      var secondCounter = 0;
+      // var secondCounter = 0;
       function transact() {
         var account1 = Math.floor(Math.random() * 10) + 1;
         var account2 = Math.floor(Math.random() * 10) + 1;
@@ -74,9 +78,13 @@
         }
         var account1Data = accounts[account1].split(",");
         var account2Data = accounts[account2].split(",");
-        var amount = Math.floor(Math.random() * 100) + 1;
-        var newBalance1 = parseInt(account1Data[1]) - amount;
-        var newBalance2 = parseInt(account2Data[1]) + amount;
+        var account1Balance = parseFloat(account1Data[1]);
+        var account2Balance = parseFloat(account2Data[1]);
+        var amount = Math.random() * (account1Balance - 1) + 1;
+        amount = parseFloat(amount.toFixed(2));
+        document.getElementById("last-amount").innerHTML = amount;
+        var newBalance1 = account1Balance - amount;
+        var newBalance2 = account2Balance + amount;
         account1Data[1] = newBalance1;
         account2Data[1] = newBalance2;
         accounts[account1] = account1Data.join(",");
@@ -90,26 +98,38 @@
           ) {
             var balance = accounts[i].split(",")[1];
             rows[i].childNodes[1].innerHTML = balance;
+            totalBalance += parseFloat(balance);
           }
         }
         counter++;
 
-        if (counter >= 999) {
+        if (counter >= 99) {
           var exponent = Math.floor(counter / 1000);
           var firstCounter = 1;
           secondCounter = secondCounter + 1;
-          if (secondCounter >= 293) {
+          if (secondCounter >= 9) {
             thirdCounter = thirdCounter + 1;
             secondCounter = 1;
           }
           document.getElementById("counter").innerHTML = firstCounter;
           document.getElementById("counter-2").innerHTML = secondCounter;
           document.getElementById("counter-3").innerHTML = thirdCounter;
-          counter = 0;
+          counter = 1;
         } else {
           document.getElementById("counter").innerHTML = counter;
         }
+        // recalculate total balance
+        totalBalance = 0;
+        for (var i = 1; i < accounts.length; i++) {
+          var account = accounts[i].split(",");
+          var balance = parseFloat(account[1]);
+          totalBalance += balance;
+        }
+        // update total balance displayed on the page
+        document.getElementById("total-balance").innerHTML =
+          totalBalance.toFixed(2);
       }
+
       // Call the readCSV function to display the accounts table
       readCSV();
     </script>
