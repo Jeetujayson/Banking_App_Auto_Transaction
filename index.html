@@ -16,12 +16,17 @@
     <button id="stop" onclick="stopTransaction()" disabled>Stop</button>
     <br /><br />
     <p>Last Transacted Amount: <span id="last-amount"></span></p>
+    <p>Time taken by last transaction: <span id="time-taken"></span></p>
+
     <p>Total Balance: <span id="total-balance"></span></p>
+
     <p>Transaction Counter: <span id="counter"></span></p>
     <p>E notation: <span id="counter-2"></span></p>
     <p>Aleph null: <span id="counter-3"></span></p>
 
     <script>
+      var startTime;
+      var endTime;
       var interval;
       var accounts;
       var counter = 0;
@@ -55,10 +60,11 @@
 
       // Start the auto transaction
       function startTransaction() {
+        startTime = Date.now();
         totalBalance = 0;
         document.getElementById("start").disabled = true;
         document.getElementById("stop").disabled = false;
-        interval = setInterval(transact, 1);
+        interval = setInterval(transact, 0.000000000001);
       }
 
       // Stop the auto transaction
@@ -70,12 +76,14 @@
 
       // Perform a transaction between two random accounts
       // var secondCounter = 0;
+
       function transact() {
         var account1 = Math.floor(Math.random() * 10) + 1;
         var account2 = Math.floor(Math.random() * 10) + 1;
         while (account1 == account2) {
           account2 = Math.floor(Math.random() * 10) + 1;
         }
+
         var account1Data = accounts[account1].split(",");
         var account2Data = accounts[account2].split(",");
         var account1Balance = parseFloat(account1Data[1]);
@@ -83,6 +91,10 @@
         var amount = Math.random() * (account1Balance - 1) + 1;
         amount = parseFloat(amount.toFixed(2));
         document.getElementById("last-amount").innerHTML = amount;
+        // var endTime = Date.now();
+        // var timeTaken = endTime - startTime + "ms";
+        // document.getElementById("time-taken").innerHTML = timeTaken;
+
         var newBalance1 = account1Balance - amount;
         var newBalance2 = account2Balance + amount;
         account1Data[1] = newBalance1;
@@ -118,6 +130,7 @@
         } else {
           document.getElementById("counter").innerHTML = counter;
         }
+
         // recalculate total balance
         totalBalance = 0;
         for (var i = 1; i < accounts.length; i++) {
@@ -128,6 +141,11 @@
         // update total balance displayed on the page
         document.getElementById("total-balance").innerHTML =
           totalBalance.toFixed(2);
+
+        var endTime = Date.now();
+        var timeTaken = endTime - startTime;
+        document.getElementById("time-taken").innerHTML = timeTaken + "ms";
+        startTime = Date.now();
       }
 
       // Call the readCSV function to display the accounts table
