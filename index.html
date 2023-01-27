@@ -20,8 +20,12 @@
 
     <p>Total Balance: <span id="total-balance"></span></p>
 
-    <p>Transaction Counter: <span id="counter"></span></p>
-    <p>E notation: <span id="counter-2"></span></p>
+    <p>Absolute Transaction Counter: <span id="counter"></span></p>
+    <p>
+      Relative Transaction Counter (Reset @ 999,999):
+      <span id="counter-1"></span>
+    </p>
+    <p>E notation:(Reset @ 9.999999e239) <span id="counter-2"></span></p>
     <p>Aleph null: <span id="counter-3"></span></p>
     <p>Factorial: <span id="counter-4"></span></p>
 
@@ -31,10 +35,12 @@
       var interval;
       var accounts;
       var counter = 0;
+      var firstCounter = 0;
       var secondCounter = 0;
       var thirdCounter = 0;
       var fourthCounter = 0;
       var totalBalance = 0;
+      var e_notation = 0;
       // Read the accounts.csv file and display it in the table
       function readCSV() {
         var xhr = new XMLHttpRequest();
@@ -117,28 +123,63 @@
         }
         counter++;
 
-        if (counter >= 999999) {
-          var exponent = Math.floor(counter / 1000);
-          var firstCounter = 1;
-          secondCounter = secondCounter + 1;
-          // (secondCounter >= 293)
-          if (secondCounter >= 293) {
-            thirdCounter = thirdCounter + 1;
-            secondCounter = 1;
-            if (thirdCounter >= 293) {
-              fourthCounter = fourthCounter + 1;
-              thirdCounter = 1;
-            }
-          }
+        // if (counter >= 99) {
+        //   var exponent = Math.floor(counter / 1000);
+        //   var firstCounter = 1;
+        //   secondCounter = secondCounter + 1;
+        //   // (secondCounter >= 293)
+        //   if (secondCounter >= 293) {
+        //     thirdCounter = thirdCounter + 1;
+        //     secondCounter = 1;
+        //     if (thirdCounter >= 293) {
+        //       fourthCounter = fourthCounter + 1;
+        //       thirdCounter = 1;
+        //     }
+        //   }
 
-          document.getElementById("counter").innerHTML = firstCounter;
-          document.getElementById("counter-2").innerHTML = secondCounter;
-          document.getElementById("counter-3").innerHTML = thirdCounter;
-          document.getElementById("counter-4").innerHTML = fourthCounter;
-          counter = 1;
+        //   document.getElementById("counter").innerHTML = firstCounter;
+        //   document.getElementById("counter-2").innerHTML = secondCounter;
+        //   document.getElementById("counter-3").innerHTML = thirdCounter;
+        //   document.getElementById("counter-4").innerHTML = fourthCounter;
+        //   counter = 1;
+        // } else {
+        //   document.getElementById("counter").innerHTML = counter;
+        // }
+
+        // Display The Absolute Counter
+        document.getElementById("counter").innerHTML = counter;
+
+        // Display The Relative Counter
+        firstCounter++;
+        if (firstCounter >= 999999) {
+          document.getElementById("counter-1").innerHTML = firstCounter;
+          firstCounter = 0;
         } else {
-          document.getElementById("counter").innerHTML = counter;
+          document.getElementById("counter-1").innerHTML = firstCounter;
         }
+
+
+        // Display The eNotation
+        secondCounter++;
+        function toEnotation(num, decimalPlaces) {
+          e_notation = ((secondCounter / 10000000).toExponential(decimalPlaces));
+        }
+        toEnotation(10, 6);
+
+        if (e_notation >= 9.999999e239){
+        // if (e_notation >= 9.9e2){
+          secondCounter = 1;
+          thirdCounter++
+          document.getElementById("counter-2").innerHTML = e_notation;
+        }else {
+          document.getElementById("counter-2").innerHTML = e_notation;
+        }
+
+        // document.getElementById("counter-2").innerHTML = e_notation;
+
+        // Display The Aleph null
+        // aleph_null = thirdCounter
+        document.getElementById("counter-3").innerHTML = thirdCounter;
 
         // recalculate total balance
         totalBalance = 0;
