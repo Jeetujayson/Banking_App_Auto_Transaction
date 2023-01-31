@@ -25,8 +25,8 @@
       Relative Transaction Counter (Reset @ 999,999):
       <span id="counter-1"></span>
     </p>
-    <p>E notation:(Reset @ 9.999999e293) <span id="counter-2"></span></p>
-    <p>Aleph null: <span id="counter-3"></span></p>
+    <p>E notation:(Reset @ 9.999999e293 to 1.000000e-7) <span id="counter-2"></span></p>
+    <p>Aleph null:(Reset @ 293 to 1) <span id="counter-3"></span></p>
     <p>Factorial: <span id="counter-4"></span></p>
 
     <script>
@@ -41,6 +41,7 @@
       var fourthCounter = 0;
       var totalBalance = 0;
       var e_notation = 0;
+      var formattedNumber = 0;
       // Read the accounts.csv file and display it in the table
       function readCSV() {
         var xhr = new XMLHttpRequest();
@@ -73,6 +74,7 @@
         document.getElementById("start").disabled = true;
         document.getElementById("stop").disabled = false;
         interval = setInterval(transact, 0.000000000001);
+        // interval = setInterval(transact, 10);
       }
 
       // Stop the auto transaction
@@ -137,20 +139,13 @@
         //     }
         //   }
 
-        //   document.getElementById("counter").innerHTML = firstCounter;
-        //   document.getElementById("counter-2").innerHTML = secondCounter;
-        //   document.getElementById("counter-3").innerHTML = thirdCounter;
-        //   document.getElementById("counter-4").innerHTML = fourthCounter;
-        //   counter = 1;
-        // } else {
-        //   document.getElementById("counter").innerHTML = counter;
-        // }
 
         // Display The Absolute Counter
         document.getElementById("counter").innerHTML = counter;
 
         // Display The Relative Counter
         firstCounter++;
+        // if (firstCounter >= 9) {
         if (firstCounter >= 999999) {
           document.getElementById("counter-1").innerHTML = firstCounter;
           firstCounter = 0;
@@ -162,13 +157,14 @@
         // Display The eNotation
         secondCounter++;
         function toEnotation(num, decimalPlaces) {
+          // e_notation = ((secondCounter / 10).toExponential(decimalPlaces));
           e_notation = ((secondCounter / 10000000).toExponential(decimalPlaces));
         }
         toEnotation(10, 6);
 
         if (e_notation >= 9.999999e293){
-        // if (e_notation >= 9.9e2){
-          secondCounter = 1;
+        // if (e_notation >= 9.9e1){
+          secondCounter = firstCounter;
           thirdCounter++
           document.getElementById("counter-2").innerHTML = e_notation;
         }else {
@@ -178,8 +174,19 @@
         // document.getElementById("counter-2").innerHTML = e_notation;
 
         // Display The Aleph null
-        // aleph_null = thirdCounter
-        document.getElementById("counter-3").innerHTML = thirdCounter;
+        // if (thirdCounter >= 3){
+        if (thirdCounter >= 293){
+          thirdCounter = 1
+          fourthCounter++
+          document.getElementById("counter-3").innerHTML = thirdCounter;
+        } else {
+            document.getElementById("counter-3").innerHTML = thirdCounter;
+      }
+
+      // Display The Factorial
+        var digits = counter.toString().length;
+        var formattedNumber = "9".repeat(Math.max(0, digits));
+          document.getElementById("counter-4").innerHTML = formattedNumber;
 
         // recalculate total balance
         totalBalance = 0;
