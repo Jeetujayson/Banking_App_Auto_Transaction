@@ -36,7 +36,7 @@
       var accounts;
       var counter = 0;
       var firstCounter = 0;
-      var secondCounter = 0;
+      var secondCounter = 1;
       var thirdCounter = 0;
       var fourthCounter = 0;
       var totalBalance = 0;
@@ -144,12 +144,13 @@
         document.getElementById("counter").innerHTML = counter;
 
         // Display The Relative Counter
-        firstCounter++;
+        
         // if (firstCounter >= 9) {
         if (firstCounter >= 999999) {
           document.getElementById("counter-1").innerHTML = firstCounter;
           firstCounter = 0;
         } else {
+          firstCounter++;
           document.getElementById("counter-1").innerHTML = firstCounter;
         }
 
