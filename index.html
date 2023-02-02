@@ -155,7 +155,7 @@
 
 
         // Display The eNotation
-        secondCounter++;
+        
         function toEnotation(num, decimalPlaces) {
           // e_notation = ((secondCounter / 10).toExponential(decimalPlaces));
           e_notation = ((secondCounter / 10000000).toExponential(decimalPlaces));
@@ -168,6 +168,7 @@
           thirdCounter++
           document.getElementById("counter-2").innerHTML = e_notation;
         }else {
+          secondCounter++;
           document.getElementById("counter-2").innerHTML = e_notation;
         }
 
