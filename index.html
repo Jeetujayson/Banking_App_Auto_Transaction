@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Address Verification System</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
     <h1>Proof Of Concept</h1>
@@ -12,8 +13,9 @@
       </tr>
     </table>
     <br />
+    <div class="container">
     <button id="start" onclick="startTransaction()">Start</button>
-    <button id="stop" onclick="stopTransaction()" disabled>Stop</button>
+    <button id="stop" onclick="stopTransaction()" disabled>Stop</button></div>
     <br /><br />
     <p>Last Transacted Amount: <span id="last-amount"></span></p>
     <p>Time taken by last transaction: <span id="time-taken"></span></p>
@@ -101,9 +103,7 @@
         var amount = Math.random() * (account1Balance - 1) + 1;
         amount = parseFloat(amount.toFixed(2));
         document.getElementById("last-amount").innerHTML = amount;
-        // var endTime = Date.now();
-        // var timeTaken = endTime - startTime + "ms";
-        // document.getElementById("time-taken").innerHTML = timeTaken;
+
 
         var newBalance1 = account1Balance - amount;
         var newBalance2 = account2Balance + amount;
@@ -124,20 +124,6 @@
           }
         }
         counter++;
-
-        // if (counter >= 99) {
-        //   var exponent = Math.floor(counter / 1000);
-        //   var firstCounter = 1;
-        //   secondCounter = secondCounter + 1;
-        //   // (secondCounter >= 293)
-        //   if (secondCounter >= 293) {
-        //     thirdCounter = thirdCounter + 1;
-        //     secondCounter = 1;
-        //     if (thirdCounter >= 293) {
-        //       fourthCounter = fourthCounter + 1;
-        //       thirdCounter = 1;
-        //     }
-        //   }
 
 
         // Display The Absolute Counter
@@ -173,8 +159,6 @@
           secondCounter++;
           document.getElementById("counter-2").innerHTML = e_notation;
         }
-
-        // document.getElementById("counter-2").innerHTML = e_notation;
 
         // Display The Aleph null
         // if (thirdCounter >= 3){
